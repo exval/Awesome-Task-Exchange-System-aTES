@@ -34,6 +34,7 @@ docker-compose exec auth src/manage.py collectstatic
 docker-compose exec taskmanager src/manager.py makemigrations
 docker-compose exec taskmanager src/manager.py migrate
 docker-compose exec taskmanager src/manager.py collectstatic
+docker-compose exec taskmanager src/manager.py run_consumer
 ```
 
 ## Project's events.
