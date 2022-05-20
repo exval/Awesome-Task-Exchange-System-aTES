@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <table class="ui table">
+            <thead>
+                <th>Title</th>
+                <th>Desctiption</th>
+                <th>Status</th>
+            </thead>
+            <tbody>
+            {% for task in tasks%}
+                <tr>
+                    <td><a href="{% url 'tracker:task_detail' task.pk %}">{{task.title}}</a></td>
+                    <td>{{task.description}}</td>
+                    <td>{{task.status}}</td>
+                </tr>
+            {%endfor%}
+            </tbody>
+        </table>
+{% endblock %}

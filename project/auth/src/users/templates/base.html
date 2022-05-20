@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{% static 'semantic/semantic.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <title>{% block title %}Auth{% endblock %}</title>
+</head>
+<body>
+  <header>
+    {% block header %}
+    <div class="ui top menu">
+      <div class="item">
+        <img src="{% static 'img/logo.png' %}">
+      </div>
+      <div class="item">
+        <b>Auth</b>
+      </div>
+
+      <div class="right menu">
+        {% if user.is_authenticated %}
+          <span class="item current-user" id="{{user.id}}"><i class="user outline icon"></i> {{ user.username }}</span>
+          <a class="item" href="#"><i class="sign-out alternate icon"></i> Logout</a>
+        {% else %}
+          <a class="item" href="{% url 'users:login' %}"><i class="sign-in alternate icon"></i> Login</a>
+        {% endif %}
+      </div>
+    </div>
+    {% endblock %}
+  </header>
+  <div class="ui main text container">
+    {% block content %}{% endblock %}
+  </div>
+  <footer>
+    {% block footer %}{% endblock %}
+  </footer>
+</body>
+</html>

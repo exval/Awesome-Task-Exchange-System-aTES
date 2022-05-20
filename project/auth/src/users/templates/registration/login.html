@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="ui header">Login</h1>
+
+{% if form.errors %}
+<div class="ui attached error message">
+    {{ form.non_field_errors }}
+</div>
+{% endif %}
+
+<form class="ui form attached fluid segment" method="post" action="{% url 'users:login' %}">
+    {% csrf_token %}
+    <div class="field">
+        <div class="ui left icon input">
+            <i class="user icon"></i>
+            {{ form.username }}
+        </div>
+    </div>
+    <div class="field">
+        <div class="ui left icon input">
+            <i class="lock icon"></i>
+            {{ form.password }}
+        </div>
+    </div>
+    <button class="ui fluid primary button" type="submit">Login</button>
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+
+{% endblock %}

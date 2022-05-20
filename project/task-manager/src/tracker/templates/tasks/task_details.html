@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Title: {{task.title}}</h1>
+<div>
+    <table class="ui table">
+        <thead>
+            <th>Description</th>
+            <th>Assingned on</th>
+            <th>Status</th>
+            <th>Actions</th>
+            <th>UUID</th>
+        </thead>
+        <tbody>
+            <td>{{task.description}}</td>
+            <td>{{task.assigned_on}}</td>
+            <td>{{task.status}}</td>
+            <td>
+                <form action="{% url 'tracker:close_task' task.pk %}" method="post">
+                    {% csrf_token %}
+                    <input type="submit" class="ui button green {% if user != task.assigned_on %} disabled {% endif %}" value="Close task">
+                </form>
+            </td>
+            <td>{{task.public_id}}</td>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
