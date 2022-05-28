@@ -13,6 +13,5 @@ fi
 
 python src/manage.py flush --no-input
 python src/manage.py migrate
-python src/manage.py collectstatic --no-input
 
 exec "$@"

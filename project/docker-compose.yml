@@ -28,7 +28,6 @@ services:
       - POSTGRES_PASSWORD=p@ssw0rd
       - POSTGRES_DB=auth_db
 
-
   taskmanager:
     build: ./task-manager
     container_name: task-manager
@@ -53,6 +52,33 @@ services:
       - POSTGRES_USER=parrot
       - POSTGRES_PASSWORD=p@ssw0rd
       - POSTGRES_DB=taskmanager
+
+  # billing:
+  #   build: ./billing
+  #   container_name: billing
+  #   environment:
+  #     - ID=${ID}
+  #     - SECRET=${SECRET}
+  #   command: python src/manage.py runserver 0.0.0.0:8000
+  #   working_dir: /app
+  #   volumes:
+  #     - ./billing/:/app/
+  #   ports:
+  #     - 8080:8080
+  #   env_file:
+  #     - ./billing/src/.env.dev
+  #   depends_on:
+  #     - billing-db
+
+  # billing-db:
+  #   image: postgres:13.0-alpine
+  #   container_name: billing_pgdb
+  #   volumes:
+  #     - postgres_billing_data:/var/lib/postgresql/data/
+  #   environment:
+  #     - POSTGRES_USER=billing_popug
+  #     - POSTGRES_PASSWORD=p@ssw0rd
+  #     - POSTGRES_DB=billing_db
 
 # ----- SET UP KAFKA -----
   zookeeper:
@@ -84,3 +110,4 @@ services:
 volumes:
   postgres_auth_data:
   postgres_taskmanager_data:
+  postgres_billing_data:
