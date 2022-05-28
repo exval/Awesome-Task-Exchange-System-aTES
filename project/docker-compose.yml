@@ -1,0 +1,113 @@
+version: '3.8'
+
+services:
+  auth:
+    build: ./auth
+    container_name: auth
+    environment:
+      - ID=${ID}
+      - SECRET=${SECRET}
+    command: python src/manage.py runserver 0.0.0.0:8000
+    working_dir: /app
+    volumes:
+      - ./auth/:/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - ./auth/src/.env.dev
+    depends_on:
+      - auth-db
+
+  auth-db:
+    image: postgres:13.0-alpine
+    container_name: auth_pgdb
+    volumes:
+      - postgres_auth_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=parrot
+      - POSTGRES_PASSWORD=p@ssw0rd
+      - POSTGRES_DB=auth_db
+
+  taskmanager:
+    build: ./task-manager
+    container_name: task-manager
+    command: python src/manage.py runserver 0.0.0.0:8081
+    working_dir: /app
+    volumes:
+      - ./task-manager/:/app/
+    ports:
+      - 8081:8081
+    env_file:
+      - ./task-manager/src/.env.dev
+    depends_on:
+      - auth
+      - task-manager-db
+
+  task-manager-db:
+    image: postgres:13.0-alpine
+    container_name: task_manager_pgdb
+    volumes:
+      - postgres_taskmanager_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=parrot
+      - POSTGRES_PASSWORD=p@ssw0rd
+      - POSTGRES_DB=taskmanager
+
+  # billing:
+  #   build: ./billing
+  #   container_name: billing
+  #   environment:
+  #     - ID=${ID}
+  #     - SECRET=${SECRET}
+  #   command: python src/manage.py runserver 0.0.0.0:8000
+  #   working_dir: /app
+  #   volumes:
+  #     - ./billing/:/app/
+  #   ports:
+  #     - 8080:8080
+  #   env_file:
+  #     - ./billing/src/.env.dev
+  #   depends_on:
+  #     - billing-db
+
+  # billing-db:
+  #   image: postgres:13.0-alpine
+  #   container_name: billing_pgdb
+  #   volumes:
+  #     - postgres_billing_data:/var/lib/postgresql/data/
+  #   environment:
+  #     - POSTGRES_USER=billing_popug
+  #     - POSTGRES_PASSWORD=p@ssw0rd
+  #     - POSTGRES_DB=billing_db
+
+# ----- SET UP KAFKA -----
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    platform: linux/amd64
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+  
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    platform: linux/amd64
+    depends_on:
+      - zookeeper
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+# ---- END -----
+volumes:
+  postgres_auth_data:
+  postgres_taskmanager_data:
+  postgres_billing_data:
