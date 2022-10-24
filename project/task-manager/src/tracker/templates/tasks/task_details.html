@@ -16,10 +16,16 @@
             <td>{{task.assigned_on}}</td>
             <td>{{task.status}}</td>
             <td>
+                {% if task.status == 'OP' %}
                 <form action="{% url 'tracker:close_task' task.pk %}" method="post">
                     {% csrf_token %}
                     <input type="submit" class="ui button green {% if user != task.assigned_on %} disabled {% endif %}" value="Close task">
                 </form>
+                {% else %}
+                <div>
+                    Closed
+                </div>
+                {% endif %}
             </td>
             <td>{{task.public_id}}</td>
         </tbody>

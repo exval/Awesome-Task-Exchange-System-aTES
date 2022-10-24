@@ -6,17 +6,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*a$u0%c5(*e(xfb0#cg#y-*qm4=l_q(%38!-6ykb01nuczx_m$'
+SECRET_KEY = 'django-insecure-##gnt^4s635738pzk&x!-uy!xfi@8y7=pp8(=q)v$yk*!^y6+p'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'tracker.User'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -26,8 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'tracker',
+    'billing',
 ]
 
 MIDDLEWARE = [
@@ -38,9 +37,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'tracker.middleware.AppAuthMiddleware',
+    'billing.middleware.AppAuthMiddleware',
 ]
-
 
 ROOT_URLCONF = 'src.urls'
 
@@ -64,21 +62,22 @@ WSGI_APPLICATION = 'src.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
     "default": {
         "ENGINE": os.environ.get("SQL_ENGINE", "postgres"),
-        "NAME": os.environ.get("SQL_DATABASE", "taskmanager"),
-        "USER": os.environ.get("SQL_USER", "user"),
+        "NAME": os.environ.get("SQL_DATABASE", "billing"),
+        "USER": os.environ.get("SQL_USER", "billing_popug"),
         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-        "HOST": os.environ.get("SQL_HOST", "task-manager-db"),
+        "HOST": os.environ.get("SQL_HOST", "billing-db"),
         "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
 
+
 # Password validation
-# https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
+# https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -95,8 +94,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
-# https://docs.djangoproject.com/en/4.0/topics/i18n/
+# https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -104,11 +104,13 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
+USE_L10N = True
+
 USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.0/howto/static-files/
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
 
@@ -121,11 +123,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# BROKER_SERVER = f'{os.environ.get("BROKER_HOST")}:{os.environ.get("BROKER_PORT")}'
 BROKER_SERVER = 'kafka:9092'
 
 

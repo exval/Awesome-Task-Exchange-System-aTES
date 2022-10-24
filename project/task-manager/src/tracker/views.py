@@ -25,11 +25,10 @@ def logout(request):
         'http://auth:8000/o/revoke_token/',
         method='POST',
         data=urllib.parse.urlencode(data).encode('ascii'),
-        )
+    )
     resp = urllib.request.urlopen(req)
     return HttpResponseRedirect(reverse('tracker:index'))
-    # request.session['AUTH_APP_TOKEN'] = ''
-    # return redirect(settings.AUTH_APP_LOGIN_FORM_URL)
+
 
 def index(request):
     user = request.user
@@ -37,11 +36,13 @@ def index(request):
     context = {'tasks': all_tasks}
     return render(request, 'index.html', context)
 
+
 def my_tasks(request):
     user = request.user
     users_tasks = Task.objects.filter(assigned_on=user)
-    context = {'tasks':  users_tasks}
+    context = {'tasks': users_tasks}
     return render(request, 'tasks/tasks.html', context)
+
 
 def create_task(request):
     if request.method == 'POST':
@@ -59,6 +60,7 @@ def create_task(request):
         form = CreateTaskForm()
     return render(request, 'tasks/create_task.html', {'form': form})
 
+
 def task_detail(request, pk):
     try:
         task = Task.objects.get(pk=pk)
@@ -66,6 +68,7 @@ def task_detail(request, pk):
         print(f'Task with pk {pk} DoesNotExist')
         return redirect(reverse('tracker:my_tasks'))
     return render(request, 'tasks/task_details.html', {'task': task})
+
 
 def shuffle_tasks(request):
     if request.method == 'POST':
@@ -78,6 +81,7 @@ def shuffle_tasks(request):
         return redirect(reverse('tracker:index'))
     else:
         return JsonResponse({'response': 'Wrong method'})
+
 
 def close_task(request, pk):
     if request.method == 'POST':
